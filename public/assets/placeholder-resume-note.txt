@@ -1,0 +1,4 @@
+Resume download placeholder.
+
+The source resumes in the workspace contain private application information and should not be published directly.
+Replace this file with a public-safe bilingual resume after phone number, private application framing, and sensitive details are removed.
