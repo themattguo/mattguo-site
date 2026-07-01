@@ -66,7 +66,7 @@ video {
   --hero-title-min: 3.2rem;
   --hero-y: 36%;
   --honor-min-height: 420px;
-  --page-hero-height: 86svh;
+
   --photo-min-height: 230px;
   --photo-tall-height: 472px;
   --section-padding: 92px;
@@ -267,6 +267,7 @@ video {
 
 .eyebrow {
   margin: 0;
+  display: inline-block;
   color: var(--accent);
   font-family:
     "SF Pro Text", -apple-system, BlinkMacSystemFont, "Noto Sans SC", sans-serif;
@@ -275,6 +276,11 @@ video {
   letter-spacing: 0;
   text-transform: uppercase;
   text-align: center;
+}
+
+/* Chinese eyebrow should not use uppercase transform */
+.site-shell.lang-cn .eyebrow {
+  text-transform: none;
 }
 
 h1,
@@ -302,11 +308,14 @@ h3,
 
 .hero-copy h1 {
   margin: 0;
+  display: inline-block;
   max-width: 900px;
   font-size: clamp(var(--hero-title-min), var(--hero-title-fluid), var(--hero-title-max));
   font-weight: 560;
   line-height: 0.96;
-  word-break: keep-all;
+  word-break: normal;
+  overflow-wrap: break-word;
+  text-align: center;
 }
 
 .hero-copy p:not(.eyebrow) {
@@ -315,7 +324,7 @@ h3,
   color: rgba(255, 255, 255, 0.76);
   font-size: 21px;
   line-height: 1.46;
-  word-break: keep-all;
+  word-break: normal;
   overflow-wrap: break-word;
 }
 
@@ -346,8 +355,12 @@ h3,
   object-fit: cover;
   object-position: center var(--hero-y);
   filter: saturate(0.96) contrast(1.04) brightness(var(--hero-brightness));
-  transform: scale(1.01);
-  animation: quiet-zoom 18s ease-in-out infinite alternate;
+  transform: scale(1.01) translateZ(0);
+  opacity: 0;
+  animation: quiet-zoom 18s ease-in-out infinite alternate, heroFadeIn 0.45s ease forwards;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .hero-figure::after {
@@ -509,7 +522,7 @@ h3,
 .article-hero {
   position: relative;
   display: grid;
-  min-height: var(--page-hero-height);
+  min-height: 100svh;
   align-content: end;
   padding: 92px 28px 48px;
   overflow: hidden;
@@ -528,6 +541,11 @@ h3,
   object-fit: cover;
   object-position: center;
   filter: brightness(0.7) saturate(0.94);
+  opacity: 0;
+  animation: heroFadeIn 0.45s ease forwards;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .page-translation img,
@@ -554,6 +572,9 @@ h3,
 
 .page-hero-copy,
 .article-hero > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: min(980px, 100%);
   margin: 0 auto;
   text-align: center;
@@ -562,10 +583,22 @@ h3,
 .page-hero h1,
 .article-hero h1 {
   margin: 14px 0 0;
+  display: inline-block;
   font-size: clamp(3rem, 7vw, 6rem);
   font-weight: 500;
   line-height: 0.98;
-  word-break: keep-all;
+  word-break: normal;
+  overflow-wrap: break-word;
+  text-align: center;
+}
+
+.page-translation h1 {
+  white-space: nowrap;
+}
+
+.page-hero .eyebrow,
+.article-hero .eyebrow {
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 
 .page-hero p:not(.eyebrow) {
@@ -574,7 +607,7 @@ h3,
   color: rgba(255, 255, 255, 0.78);
   font-size: 20px;
   line-height: 1.55;
-  word-break: keep-all;
+  word-break: normal;
   overflow-wrap: break-word;
 }
 
@@ -1048,7 +1081,7 @@ h3,
 }
 
 .article-hero {
-  min-height: 92svh;
+  /* height inherited from .page-hero, .article-hero rule at ~525 to match home hero */
 }
 
 .back-link {
@@ -1096,6 +1129,13 @@ h3,
   line-height: 1.7;
 }
 
+.disclaimer-note {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
 footer {
   display: flex;
   justify-content: center;
@@ -1129,8 +1169,25 @@ footer {
   position: absolute;
   top: 20px;
   right: 20px;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
   color: #fff;
-  background: rgba(255, 255, 255, 0.12);
+  font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Noto Sans SC", sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  width: auto;
+  height: auto;
+}
+
+.close-button:hover {
+  background: rgba(255, 255, 255, 0.24);
 }
 
 @keyframes quiet-zoom {
@@ -1143,6 +1200,16 @@ footer {
   }
 }
 
+@keyframes heroFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -1151,6 +1218,12 @@ footer {
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .hero-figure img,
+  .page-hero img,
+  .article-hero img {
+    opacity: 1 !important;
   }
 }
 
@@ -1216,6 +1289,15 @@ footer {
     gap: 13px;
   }
 
+  .hero-copy h1 {
+    font-size: clamp(2.2rem, 8vw, 4.2rem);
+  }
+
+  .page-hero h1,
+  .article-hero h1 {
+    font-size: clamp(2.2rem, 9vw, 4rem);
+  }
+
   .hero-copy p:not(.eyebrow),
   .page-hero p:not(.eyebrow) {
     font-size: 17px;
@@ -1266,7 +1348,7 @@ footer {
 
   .page-hero,
   .article-hero {
-    min-height: 82svh;
+    min-height: 100svh;
     padding: 82px 16px 34px;
   }
 

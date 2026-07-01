@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   ArrowLeft,
   ArrowUpRight,
@@ -11,6 +11,18 @@ import {
 } from "lucide-react";
 
 const documentsBase = "/assets/documents";
+
+function openMailto(e) {
+  e.preventDefault();
+  const email = "themattguo@outlook.com";
+  window.location.href = "mailto:" + email;
+  // Fallback: copy to clipboard after a short delay
+  setTimeout(() => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(email).catch(() => {});
+    }
+  }, 300);
+}
 
 const copy = {
   cn: {
@@ -34,6 +46,8 @@ const copy = {
     role: "角色",
     method: "做法",
     preview: "10 秒一见",
+    darkMode: "深色模式",
+    lightMode: "浅色模式",
   },
   en: {
     lang: "中文",
@@ -56,6 +70,8 @@ const copy = {
     role: "Role",
     method: "Approach",
     preview: "A 10-second look",
+    darkMode: "Dark",
+    lightMode: "Light",
   },
 };
 
@@ -156,6 +172,7 @@ const projects = [
       summary: "课程团队项目，展示中期汇报、翻译分析与猪八戒样章的中英对照材料。",
       role: "项目管理、术语协调、样章整理、翻译分析与审校讨论",
       method: "以术语表统一称谓，以角色声线校准语气，以审校表收束风格。",
+      disclaimer: "学术课程项目。游戏内容版权归属游戏科学。",
     },
     en: {
       eyebrow: "Game Localization",
@@ -164,6 +181,7 @@ const projects = [
       summary: "A course team project featuring a midterm report, translation analyses, and bilingual Zhu Bajie samples.",
       role: "Project management, terminology coordination, sample organization, analysis, and review discussions",
       method: "Glossaries align naming; voice notes tune tone; review sheets bring the style together.",
+      disclaimer: "Academic course project. Game content © Game Science.",
     },
     documents: [
       ["盘丝岭翻译项目中期汇报", "PDF", `${documentsBase}/translation/black-myth-midterm.pdf`, "/assets/document-covers/black-myth-midterm.jpg"],
@@ -215,6 +233,7 @@ const projects = [
       summary: "演示型文本翻译，重点处理信息层级、标题节奏、图表旁注与中英版式关系。",
       role: "演示材料翻译、中文终稿整理、课堂展示",
       method: "把 slide 当作信息界面处理：先可扫读，再求准确，再看版式。",
+      disclaimer: "课堂翻译练习。原始材料归属 The Coca-Cola Company。",
     },
     en: {
       eyebrow: "Deck Translation",
@@ -223,6 +242,7 @@ const projects = [
       summary: "A presentation-translation case focused on hierarchy, headline rhythm, chart notes, and bilingual layout.",
       role: "Deck translation, Chinese final preparation, and classroom presentation",
       method: "Slides are treated as information interfaces: scanability first, accuracy next, layout throughout.",
+      disclaimer: "Classroom translation exercise. Source material © The Coca-Cola Company.",
     },
     documents: [
       ["Demonstration Slides", "PDF/PPT 展示", `${documentsBase}/translation/coca-cola-class-presentation.pdf`, "/assets/document-covers/coca-cola-presentation.jpg"],
@@ -453,7 +473,7 @@ function SiteHeader({ lang, t, onLang, theme, onTheme }) {
         ))}
       </nav>
       <div className="header-actions">
-        <button className="icon-button" onClick={onTheme} title={theme === "light" ? "深色模式" : "浅色模式"}>
+        <button className="icon-button" onClick={onTheme} title={theme === "light" ? t.darkMode : t.lightMode}>
           {theme === "light" ? <Moon size={16} aria-hidden="true" /> : <Sun size={16} aria-hidden="true" />}
         </button>
         <button className="text-button" onClick={onLang}>{t.lang}</button>
@@ -468,15 +488,15 @@ function HomePage({ lang, t }) {
       <section className="home-hero">
         <div className="hero-copy">
           <p className="eyebrow">{t.heroKicker}</p>
-          <h1>{t.heroTitle}</h1>
+          <h1>{lang === 'cn' ? splitTitle(t.heroTitle) : t.heroTitle}</h1>
           <p>{t.heroBody}</p>
           <div className="hero-actions">
             <a className="button primary" href="#entries">{t.enter}</a>
-            <button className="button secondary" onClick={() => window.location.href = "mailto:themattguo@outlook.com"}>{t.contact}</button>
+            <a href="mailto:themattguo@outlook.com" className="button secondary" onClick={openMailto}>{t.contact}</a>
           </div>
         </div>
         <figure className="hero-figure">
-          <img src="/assets/photos/IMG_2253.jpg" alt="" />
+          <img src="/assets/photos/IMG_2253.jpg" alt="" decoding="async" loading="lazy" />
         </figure>
       </section>
 
@@ -487,7 +507,7 @@ function HomePage({ lang, t }) {
         <div className="entry-grid">
           {homeEntries.map(([cn, en, href, image, meta]) => (
             <a className="entry-card" href={href} key={href}>
-              <img src={image} alt="" />
+              <img src={image} alt="" loading="lazy" />
               <span>{lang === "cn" ? meta : en}</span>
               <strong>{lang === "cn" ? cn : en}</strong>
               <ArrowUpRight size={19} aria-hidden="true" />
@@ -499,15 +519,28 @@ function HomePage({ lang, t }) {
   );
 }
 
+function splitTitle(title) {
+  if (!title.includes('，')) return title;
+  const result = [];
+  title.split('，').forEach((part, i, arr) => {
+    result.push(part);
+    if (i < arr.length - 1) {
+      result.push('，');
+      result.push(<br key={i} />);
+    }
+  });
+  return result;
+}
+
 function PageHero({ page, lang }) {
   const meta = pageMeta[page];
   const [kicker, title, body] = meta[lang];
   return (
     <section className={`page-hero page-${page}`}>
-      <img src={meta.image} alt="" />
+      <img src={meta.image} alt="" decoding="async" loading="lazy" />
       <div className="page-hero-copy">
         <p className="eyebrow">{kicker}</p>
-        <h1>{title}</h1>
+        <h1>{lang === 'cn' && page === 'film' ? splitTitle(title) : title}</h1>
         <p>{body}</p>
       </div>
     </section>
@@ -575,7 +608,6 @@ function TranslationPage({ lang, t, activeTranslation, setActiveTranslation, onV
         </aside>
         <article className="translation-panel">
           <div className="article-intro">
-            <p className="eyebrow">{active.year}</p>
             <h2>{active[lang].short}</h2>
             <p>{active[lang].summary}</p>
           </div>
@@ -608,7 +640,7 @@ function PhotographyPage({ lang, themeIndex, setThemeIndex, setLightbox }) {
             className={cx("photo-tile", index % 5 === 0 && "wide", index % 7 === 0 && "tall")}
             onClick={() => setLightbox(`${photoBase}/${photo}`)}
           >
-            <img src={`${photoBase}/${photo}`} alt="" />
+            <img src={`${photoBase}/${photo}`} alt="" loading="lazy" />
           </button>
         ))}
       </div>
@@ -635,7 +667,7 @@ function HonorGallery({ lang }) {
             key={file}
             onClick={() => setActive(`${honorBase}/${file}`)}
           >
-            <img src={`${honorBase}/${file}`} alt="" />
+            <img src={`${honorBase}/${file}`} alt="" loading="lazy" />
             <span>
               <Award size={15} aria-hidden="true" />
               {label}
@@ -707,11 +739,11 @@ function AboutPage({ lang, t }) {
           </div>
         </article>
         <aside className="contact-panel">
-          <img src="/assets/photos/resume-photo.jpg" alt="" className="resume-photo" />
-          <button className="button primary" onClick={() => window.location.href = "mailto:themattguo@outlook.com"}>
+          <img src="/assets/photos/resume-photo.jpg" alt="" className="resume-photo" loading="lazy" />
+          <a href="mailto:themattguo@outlook.com" className="button primary" onClick={openMailto}>
             <Mail size={17} aria-hidden="true" />
             themattguo@outlook.com
-          </button>
+          </a>
           <a className="button secondary" href="/hall">
             <FileText size={17} aria-hidden="true" />
             {lang === "cn" ? "查看材料档案" : "Evidence archive"}
@@ -728,7 +760,7 @@ function ProjectPage({ project, lang, t, onViewPdf }) {
   return (
     <article className="article-page">
       <section className="article-hero">
-        <img src={heroImage} alt="" />
+        <img src={heroImage} alt="" decoding="async" loading="lazy" />
         <a className="back-link" href={isFilm ? "/film" : "/translation"}>
           <ArrowLeft size={17} aria-hidden="true" />
           {t.back}
@@ -761,6 +793,9 @@ function ProjectPage({ project, lang, t, onViewPdf }) {
           </div>
         )}
         {project.documents && <DocumentShelf lang={lang} t={t} documents={project.documents} onView={onViewPdf} />}
+        {project[lang].disclaimer && (
+          <p className="disclaimer-note">{project[lang].disclaimer}</p>
+        )}
       </section>
     </article>
   );
@@ -771,7 +806,7 @@ function DocumentShelf({ documents, onView }) {
     <div className="document-shelf">
       {documents.map(([title, type, href, cover]) => (
         <button className="document-card" onClick={() => onView(href)} key={href}>
-          {cover && <img src={cover} alt="" />}
+          {cover && <img src={cover} alt="" loading="lazy" />}
           <span className="doc-type">{type}</span>
           <strong>{title}</strong>
         </button>
