@@ -2,7 +2,6 @@ node_modules
 dist
 .DS_Store
 .npm-cache
-public/assets/video-full/
-public/assets/video-clips/
+# 视频文件必须入库：Vercel 从 Git 构建，未入库则线上 404 无法播放
 public/assets/photos/full-gallery-original/
 .vercel
