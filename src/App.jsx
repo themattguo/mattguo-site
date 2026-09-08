@@ -101,12 +101,12 @@ const heroFilms = [
     en: "Morning Routine",
   },
   {
-    id: "sukiya",
-    video: "/assets/video-clips/sukiya_preview.mp4",
-    fullVideo: "/assets/video-full/sukiya.mp4",
-    poster: "/assets/video-covers/vlog_sukiya_cover.jpg",
-    cn: "日记",
-    en: "Sukiyaki Diaries",
+    id: "cook",
+    video: "/assets/video-clips/cook_with_me_preview.mp4",
+    fullVideo: "/assets/video-full/cook_with_me.mp4",
+    poster: "/assets/video-covers/vlog_cook_with_me_cover.jpg",
+    cn: "下厨",
+    en: "Cook with Me",
   },
 ];
 
