@@ -169,7 +169,7 @@ const projects = [
       eyebrow: "游戏本地化",
       title: "《黑神话：悟空》本地化项目",
       short: "术语要准，声线要稳，神话要通。",
-      summary: "课程团队项目，展示中期汇报、翻译分析与猪八戒样章的中英对照材料。",
+      summary: "课程团队项目，展示中期与终期汇报、术语库、翻译分析与猪八戒样章的中英对照材料。",
       role: "项目管理、术语协调、样章整理、翻译分析与审校讨论",
       method: "以术语表统一称谓，以角色声线校准语气，以审校表收束风格。",
       disclaimer: "学术课程项目。游戏内容版权归属游戏科学。",
@@ -185,6 +185,8 @@ const projects = [
     },
     documents: [
       ["盘丝岭翻译项目中期汇报", "PDF", `${documentsBase}/translation/black-myth-midterm.pdf`, "/assets/document-covers/black-myth-midterm.jpg"],
+      ["盘丝岭翻译项目终期汇报", "PDF", `${documentsBase}/translation/black-myth-final.pdf`, "/assets/document-covers/black-myth-final.jpg"],
+      ["《黑神话：悟空》术语库", "PDF", `${documentsBase}/translation/black-myth-glossary.pdf`, "/assets/document-covers/black-myth-glossary.jpg"],
       ["黄眉台词翻译分析报告", "PDF", `${documentsBase}/translation/huangmei-analysis.pdf`, "/assets/document-covers/huangmei-analysis.jpg"],
       ["紫蛛儿翻译分析报告", "PDF", `${documentsBase}/translation/zizhuer-analysis.pdf`, "/assets/document-covers/zizhuer-analysis.jpg"],
       ["猪八戒影神图样章 · 中文 · ST", "PDF", `${documentsBase}/translation/zhu-bajie-portrait-cn.pdf`, "/assets/document-covers/zhu-bajie-portrait-cn.jpg"],
