@@ -1010,9 +1010,14 @@ h3,
 
 .about-detail {
   display: grid;
-  gap: 18px;
+  gap: 14px;
   padding: 24px;
   background: var(--white);
+}
+
+.about-detail > div:not(:last-child) {
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--soft);
 }
 
 .about-detail > span {

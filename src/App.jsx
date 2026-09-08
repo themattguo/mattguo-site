@@ -690,11 +690,6 @@ function AboutPage({ lang, t }) {
         ["深圳大学", "翻译硕士（MTI）", "2025年9月 – 2027年6月"],
         ["广东东软学院", "商务英语 · 本科", "2021年9月 – 2025年6月"],
       ],
-      internship: {
-        title: "海外考试教学助理",
-        company: "深圳市西尔北美文化发展有限公司",
-        period: "2024年7月 – 2025年3月",
-      },
     },
     en: {
       bio: "Matt Guo is an MTI student with a background in Business English. His work moves between translation and observation, with a focus on text, moving image, and the people, places, and expressions within context.",
@@ -702,11 +697,6 @@ function AboutPage({ lang, t }) {
         ["Shenzhen University", "MTI (Master of Translation and Interpreting)", "Sept 2025 – Jun 2027"],
         ["Neusoft Institute, Guangdong", "Business English · BA", "Sept 2021 – Jun 2025"],
       ],
-      internship: {
-        title: "Overseas Exam Teaching Assistant",
-        company: "Shenzhen Share Education Co., Ltd",
-        period: "Jul 2024 – Mar 2025",
-      },
     },
   };
   const d = aboutData[lang];
@@ -726,11 +716,6 @@ function AboutPage({ lang, t }) {
                   <p className="about-year">{year}</p>
                 </div>
               ))}
-              <div>
-                <strong>{d.internship.title}</strong>
-                <p>{d.internship.company}</p>
-                <p className="about-year">{d.internship.period}</p>
-              </div>
             </div>
             <div className="about-detail">
               <span>{lang === "cn" ? "能力" : "Capabilities"}</span>
